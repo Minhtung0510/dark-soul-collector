@@ -1,0 +1,17 @@
+﻿{
+    "game_title": "Nguoi Thu Linh Hon",
+    "menu_new_game": "Choi Moi",
+    "menu_continue": "Tiep Tuc",
+    "menu_settings": "Cai Dat",
+    "menu_quit": "Thoat",
+    "hud_health": "Mau",
+    "hud_stamina": "The Luc",
+    "hud_souls": "Linh Hon",
+    "pause_resume": "Tiep Tuc",
+    "pause_main_menu": "Menu Chinh",
+    "game_over": "Ban Da Chet",
+    "game_over_retry": "Thu Lai",
+    "settings_audio": "Am Thanh",
+    "settings_language": "Ngon Ngu",
+    "interact_prompt": "Nhan E de tuong tac"
+}

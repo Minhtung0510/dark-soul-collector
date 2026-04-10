@@ -1,0 +1,17 @@
+﻿{
+    "game_title": "Dark Soul Collector",
+    "menu_new_game": "New Game",
+    "menu_continue": "Continue",
+    "menu_settings": "Settings",
+    "menu_quit": "Quit",
+    "hud_health": "Health",
+    "hud_stamina": "Stamina",
+    "hud_souls": "Souls",
+    "pause_resume": "Resume",
+    "pause_main_menu": "Main Menu",
+    "game_over": "You Died",
+    "game_over_retry": "Retry",
+    "settings_audio": "Audio",
+    "settings_language": "Language",
+    "interact_prompt": "Press E to interact"
+}
