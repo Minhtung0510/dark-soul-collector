@@ -14,6 +14,50 @@
 
 ## 📋 Việc cần làm hôm nay
 
+### Task 0: Tải Sprite Sheet cho Player 🎨
+> Tải sprite chuyên nghiệp, cắt sẵn grid — kéo vào Unity là dùng được
+
+- [ ] Chọn 1 trong 3 pack free bên dưới và tải về:
+
+| # | Pack | Link | Đặc điểm |
+|---|------|------|-----------|
+| 🥇 | **Anokolisa** | https://anokolisa.itch.io/topdown-tileset | 3 heroes, 8 enemies, 50 weapons, 16x16 |
+| 🥈 | **Ninja Adventure** | https://pixel-boy.itch.io/ninja-adventure-ultimate-pack | 50+ characters, CC0 free, rất phổ biến |
+| 🥉 | **Mystic Woods** | https://game-endeavor.itch.io/mystic-woods | Đẹp, dark forest vibe, 16x16 |
+
+- [ ] Giải nén → kéo sprite sheet PNG vào `Assets/_Project/Art/Sprites/Player/`
+- [ ] Import trong Unity:
+
+<details>
+<summary>💡 Cách import sprite sheet vào Unity</summary>
+
+1. Chọn file PNG trong Project window
+2. Trong Inspector:
+   ```
+   Texture Type:     Sprite (2D and UI)
+   Sprite Mode:      Multiple
+   Pixels Per Unit:  16  (hoặc 32 tuỳ pack)
+   Filter Mode:      Point (no filter)   ← QUAN TRỌNG cho pixel art!
+   Compression:      None
+   ```
+3. Click **Apply**
+4. Click **Sprite Editor** → **Slice**:
+   ```
+   Type:       Grid By Cell Size
+   Pixel Size: 16 x 16  (hoặc 32 x 32 tuỳ pack)
+   ```
+5. Click **Slice** → **Apply** → ✅ Cắt tự động xong!
+
+**Tìm thêm trên itch.io:**
+- Top-down + Knight: https://itch.io/game-assets/free/tag-knight/tag-top-down
+- Top-down + RPG: https://itch.io/game-assets/free/tag-top-down/tag-rpg
+- Souls-like: https://itch.io/game-assets/free/tag-pixel-art/tag-souls-like
+- Dark Fantasy: https://itch.io/game-assets/free/tag-dark-fantasy
+</details>
+
+---
+
+
 ### Task 1: Tạo scene Gameplay 🎬
 > Tạo scene mới trong Unity để test
 
