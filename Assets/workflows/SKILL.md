@@ -306,39 +306,12 @@ DarkSoulCollector.SaveSystem  → Save/Load
 
 4. ~~**Missing .gitignore**~~ — ✅ Đã tạo `.gitignore` cho Unity project.
 
----
 
-## 📅 Kế Hoạch Ngày — Daily Plan
+## 📅 Daily Plans
 
-### 🗓️ 2026-04-11 (Hôm nay) — Player Foundation Day
+> Kế hoạch ngày được tách ra file riêng tại: `Assets/workflows/daily/`
+> Mỗi ngày 1 file: `day-01.md`, `day-02.md`, ...
 
-> **Mục tiêu:** Hoàn thành Player core để có thể di chuyển và đánh trong scene test.
-> **Thời lượng ước tính:** ~4-5 tiếng (vừa sức, không gấp)
-
-| # | Task | Thời gian | Chi tiết | Status |
-|---|------|-----------|----------|--------|
-| 1 | ✅ Fix compile errors | 15 phút | Fix CS1003 double-quote trong 6 files | ✅ Done |
-| 2 | ✅ Setup SKILL.md + .gitignore | 15 phút | Tạo bộ nhớ AI Agent + chuẩn bị Git | ✅ Done |
-| 3 | 🔲 Push lên GitHub | 10 phút | `git init` → `commit` → `push` | ⬜ Chờ user |
-| 4 | 🔲 Implement `PlayerInputHandler` | 30 phút | Đọc input WASD/Arrow + Attack + Dash + Interact. Dùng legacy Input hoặc New Input System | ⬜ |
-| 5 | 🔲 Implement `PlayerMovement` | 45 phút | 8-directional movement, dash/dodge, flip sprite, speed modifier | ⬜ |
-| 6 | 🔲 Implement `PlayerStats` | 30 phút | HP, Stamina, ATK, DEF, Speed fields + ModifyStat, events | ⬜ |
-| 7 | 🔲 Implement `PlayerAnimator` | 30 phút | Wrapper Animator: move, attack, hurt, death animations | ⬜ |
-| 8 | 🔲 Implement `PlayerController` | 20 phút | Kết nối tất cả component, khởi tạo references | ⬜ |
-| 9 | 🔲 Implement `Health` (hoàn chỉnh) | 30 phút | maxHealth, currentHealth, TakeDamage, Heal, Die, events | ⬜ |
-| 10 | 🔲 Implement `EventManager` | 20 phút | Pub/Sub system đơn giản dùng Dictionary<Type, List<Delegate>> | ⬜ |
-| 11 | 🔲 Test compile | 10 phút | Kiểm tra tất cả scripts compile không lỗi | ⬜ |
-
-**Tổng ước tính: ~4 tiếng** (bao gồm cả nghỉ giải lao)
-
-> **Lưu ý:** Hôm nay tập trung vào **code logic C#** — chưa cần tạo scene, prefab, sprite.
-> Scene test + prefab setup sẽ làm ngày mai khi có art assets.
-
-### 📌 Ngày mai (dự kiến):
-- Tạo `Gameplay.unity` scene
-- Tạo Player prefab + gắn component
-- Implement `DamageDealer` + `KnockbackHandler`
-- Test gameplay loop cơ bản
 
 ---
 
