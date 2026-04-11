@@ -1,12 +1,23 @@
-﻿namespace DarkSoulCollector.Enemy
+namespace DarkSoulCollector.Enemy
 {
     /// <summary>
-    /// Enemy attacks player. Transitions to Chase when out of range.
+    /// Attack state: enemy attacks player when in range.
+    /// Transitions to: Chase (player moved away) or Dead (killed).
     /// </summary>
     public class EnemyAttackState : IEnemyState
     {
-        public void Enter() { }
-        public void Update() { }
-        public void Exit() { }
+        private readonly EnemyBase _enemy;
+        private readonly EnemyStateMachine _stateMachine;
+        private float _attackTimer;
+
+        public EnemyAttackState(EnemyBase enemy, EnemyStateMachine stateMachine)
+        {
+            _enemy = enemy;
+            _stateMachine = stateMachine;
+        }
+
+        public void Enter()  { /* TODO: Stop agent, face player, play attack anim */ }
+        public void Update() { /* TODO: Attack cooldown, deal damage, check range → Chase */ }
+        public void Exit()   { /* TODO: Reset timer */ }
     }
 }

@@ -1,12 +1,25 @@
-﻿namespace DarkSoulCollector.Enemy
+using UnityEngine;
+
+namespace DarkSoulCollector.Enemy
 {
     /// <summary>
-    /// Enemy patrols between waypoints. Transitions to Chase on player detection.
+    /// Patrol state: enemy wanders to random NavMesh points.
+    /// Transitions to: Chase (if player detected) or Idle (reached waypoint).
     /// </summary>
     public class EnemyPatrolState : IEnemyState
     {
-        public void Enter() { }
-        public void Update() { }
-        public void Exit() { }
+        private readonly EnemyBase _enemy;
+        private readonly EnemyStateMachine _stateMachine;
+        private Vector3 _targetPoint;
+
+        public EnemyPatrolState(EnemyBase enemy, EnemyStateMachine stateMachine)
+        {
+            _enemy = enemy;
+            _stateMachine = stateMachine;
+        }
+
+        public void Enter()  { /* TODO: Pick random point on NavMesh, agent.SetDestination() */ }
+        public void Update() { /* TODO: Check arrived → Idle, check player range → Chase */ }
+        public void Exit()   { /* TODO: Stop agent */ }
     }
 }

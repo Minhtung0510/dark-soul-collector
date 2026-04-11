@@ -1,7 +1,7 @@
 # 📅 Day 01 — 2026-04-11
-## 🎯 Mục tiêu: Player di chuyển được bằng WASD
+## 🎯 Mục tiêu: Player di chuyển 3D + Camera Dark Souls style
 
-> Kết thúc ngày hôm nay, bạn phải có 1 nhân vật di chuyển 8 hướng bằng WASD trong scene.
+> Kết thúc ngày hôm nay, bạn phải có 1 nhân vật di chuyển WASD trong scene 3D với camera third-person.
 
 ---
 
@@ -9,249 +9,206 @@
 - [x] Fix lỗi CS1003 (double quotes)
 - [x] Tạo SKILL.md + .gitignore
 - [x] Push lên GitHub
+- [x] **Chuyển toàn bộ cấu trúc code sang 3D** (67 scripts updated)
 
 ---
 
 ## 📋 Việc cần làm hôm nay
 
-### Task 0: Tải Sprite Sheet cho Player 🎨
-> Tải sprite chuyên nghiệp, cắt sẵn grid — kéo vào Unity là dùng được
+### Task 0: Setup 3D Scene 🏗️
+> Tạo scene 3D với Terrain làm test arena
 
-- [ ] Chọn 1 trong 3 pack free bên dưới và tải về:
-
-| # | Pack | Link | Đặc điểm |
-|---|------|------|-----------|
-| 🥇 | **Anokolisa** | https://anokolisa.itch.io/topdown-tileset | 3 heroes, 8 enemies, 50 weapons, 16x16 |
-| 🥈 | **Ninja Adventure** | https://pixel-boy.itch.io/ninja-adventure-ultimate-pack | 50+ characters, CC0 free, rất phổ biến |
-| 🥉 | **Mystic Woods** | https://game-endeavor.itch.io/mystic-woods | Đẹp, dark forest vibe, 16x16 |
-
-- [ ] Giải nén → kéo sprite sheet PNG vào `Assets/_Project/Art/Sprites/Player/`
-- [ ] Import trong Unity:
+- [ ] File → New Scene → Save As: `Assets/Assets/_Project/Scenes/TestArena.unity`
+- [ ] Tạo Terrain: `3D Object → Terrain` (200x200)
+- [ ] Paint terrain: cỏ + đất (dùng built-in textures hoặc tải free)
+- [ ] Thêm vài đồ vật: `3D Object → Cube/Sphere` làm obstacles tạm
 
 <details>
-<summary>💡 Cách import sprite sheet vào Unity</summary>
+<summary>💡 Cách tạo Terrain nhanh</summary>
 
-1. Chọn file PNG trong Project window
-2. Trong Inspector:
+1. **Hierarchy** → Click phải → `3D Object → Terrain`
+2. Chọn Terrain → Inspector → **Terrain Settings** (⚙️ icon):
    ```
-   Texture Type:     Sprite (2D and UI)
-   Sprite Mode:      Multiple
-   Pixels Per Unit:  16  (hoặc 32 tuỳ pack)
-   Filter Mode:      Point (no filter)   ← QUAN TRỌNG cho pixel art!
-   Compression:      None
+   Terrain Width:  200
+   Terrain Length: 200
+   Terrain Height: 50
    ```
-3. Click **Apply**
-4. Click **Sprite Editor** → **Slice**:
-   ```
-   Type:       Grid By Cell Size
-   Pixel Size: 16 x 16  (hoặc 32 x 32 tuỳ pack)
-   ```
-5. Click **Slice** → **Apply** → ✅ Cắt tự động xong!
-
-**Tìm thêm trên itch.io:**
-- Top-down + Knight: https://itch.io/game-assets/free/tag-knight/tag-top-down
-- Top-down + RPG: https://itch.io/game-assets/free/tag-top-down/tag-rpg
-- Souls-like: https://itch.io/game-assets/free/tag-pixel-art/tag-souls-like
-- Dark Fantasy: https://itch.io/game-assets/free/tag-dark-fantasy
+3. **Paint Terrain** (🖌️ icon):
+   - Click `Edit Terrain Layers → Create Layer`
+   - Chọn texture cỏ/đất (built-in hoặc import)
+4. **Raise/Lower** (▲ icon):
+   - Tạo vài đồi nhỏ để terrain không phẳng
 </details>
 
 ---
 
+### Task 1: Import 3D Character Model 🎭
+> Tải model + animations từ Mixamo hoặc tự tìm
 
-### Task 1: Tạo scene Gameplay 🎬
-> Tạo scene mới trong Unity để test
-
-- [ ] File → New Scene → Save As: `Assets/Assets/_Project/Scenes/Gameplay.unity`
-- [ ] Tạo 1 empty GameObject đặt tên "Player"
-- [ ] Gắn component: `SpriteRenderer`, `Rigidbody2D`, `BoxCollider2D`
-- [ ] Rigidbody2D → set `Gravity Scale = 0` (vì game 2D top-down)
-- [ ] Rigidbody2D → set `Freeze Rotation Z = true` (để player không xoay)
+- [ ] Vào **Mixamo.com** (đăng nhập bằng Adobe ID free)
+- [ ] Chọn 1 character → Download (.FBX for Unity)
+- [ ] Tải animations: Idle, Walk, Run, Attack, Dodge, Die
+- [ ] Import vào `Assets/_Project/Art/Models/Player/`
+- [ ] Setup Animator Controller với Blend Tree
 
 <details>
-<summary>💡 Gợi ý nếu bí</summary>
+<summary>💡 Cách tải từ Mixamo</summary>
 
-**Tạo Scene:**
-- Menu Unity: `File → New Scene → Basic 2D (URP)` → `Ctrl+S` để save
-- Chọn save vào thư mục `Assets/Assets/_Project/Scenes/`
+1. Vào https://www.mixamo.com/ → Sign Up free
+2. Tab **Characters** → chọn model (ví dụ: Y Bot, X Bot, Paladin)
+3. Click **Download** → Format: `FBX for Unity (.fbx)` → Pose: `T-Pose`
+4. Tab **Animations** → tìm: Idle, Walking, Running, Slash Attack
+5. Mỗi animation → Download: `FBX for Unity` → Without Skin
+6. Kéo tất cả vào Unity folder `Assets/_Project/Art/Models/Player/`
 
-**Tạo Player GameObject:**
-- Trong Hierarchy: Click phải → `Create Empty` → đổi tên "Player"
-- Trong Inspector: `Add Component` → tìm "Sprite Renderer"
-- `Add Component` → tìm "Rigidbody 2D"
-- `Add Component` → tìm "Box Collider 2D"
-
-**Rigidbody2D Settings:**
+**Setup Animator:**
 ```
-Body Type: Dynamic
-Gravity Scale: 0          ← Quan trọng! (top-down không cần gravity)
-Constraints → Freeze Rotation Z: ✅
+States:
+  Idle → Walking → Running (Blend Tree theo Speed float)
+  Any State → Attack (trigger)
+  Any State → Dodge (trigger)
+  Any State → Death (trigger → final state)
 ```
 </details>
 
 ---
 
 ### Task 2: Implement `PlayerInputHandler` ⌨️
-> Script đọc input WASD/Arrow keys từ người chơi
+> Đọc input WASD + Mouse look cho 3D
 
 - [ ] Mở file `Scripts/Player/PlayerInputHandler.cs`
-- [ ] Thêm property `Vector2 MovementInput` — đọc từ `Input.GetAxisRaw`
-- [ ] Test: Debug.Log ra console để xem input hoạt động
+- [ ] Implement `Update()`: đọc WASD → `MovementInput` (Vector3, XZ plane)
+- [ ] Đọc Mouse delta → `MouseDelta`
+- [ ] Đọc Left Click → `AttackPressed`
+- [ ] Đọc Space → `DashPressed`
+- [ ] Test: Debug.Log để xem input
 
 <details>
-<summary>💡 Gợi ý nếu bí</summary>
+<summary>💡 Gợi ý</summary>
 
 ```csharp
-// Cần có những thứ này trong class:
-
-// Property để các script khác đọc input
-public Vector2 MovementInput { get; private set; }
-
-// Trong Update() — đọc input mỗi frame
 void Update()
 {
-    float x = Input.GetAxisRaw("Horizontal"); // A/D hoặc ←/→
-    float y = Input.GetAxisRaw("Vertical");   // W/S hoặc ↑/↓
-    MovementInput = new Vector2(x, y).normalized; // normalized để chéo không nhanh hơn
+    float h = Input.GetAxisRaw("Horizontal");
+    float v = Input.GetAxisRaw("Vertical");
+    MovementInput = new Vector3(h, 0, v).normalized;
+    
+    MouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+    
+    AttackPressed = Input.GetMouseButtonDown(0);
+    DashPressed = Input.GetKeyDown(KeyCode.Space);
+    InteractPressed = Input.GetKeyDown(KeyCode.E);
+    LockOnPressed = Input.GetKeyDown(KeyCode.Q);
 }
 ```
-
-**Giải thích:**
-- `GetAxisRaw` trả về -1, 0, hoặc 1 (không smooth)
-- `.normalized` để di chuyển chéo không nhanh hơn đi thẳng (Pythagoras)
-- `{ get; private set; }` — script khác đọc được nhưng không sửa được
 </details>
 
 ---
 
 ### Task 3: Implement `PlayerMovement` 🏃
-> Script di chuyển player dùng Rigidbody2D
+> Di chuyển 3D bằng CharacterController (không phải Rigidbody2D nữa!)
 
 - [ ] Mở file `Scripts/Player/PlayerMovement.cs`
-- [ ] Thêm `[SerializeField] float moveSpeed = 5f;`
-- [ ] Lấy reference đến `Rigidbody2D`
-- [ ] Trong `FixedUpdate()`: set `rb.velocity = direction * moveSpeed`
-- [ ] Flip sprite khi đi trái/phải
+- [ ] Implement `Awake()`: GetComponent CharacterController
+- [ ] Implement `Move()`: CharacterController.Move() relative to camera
+- [ ] Implement `ApplyGravity()`: gravity thủ công
+- [ ] Implement `GetCameraRelativeDirection()`: chuyển input thành hướng camera
+- [ ] Rotate player xoay theo hướng di chuyển
 
 <details>
-<summary>💡 Gợi ý nếu bí</summary>
+<summary>💡 Gợi ý Move camera-relative</summary>
 
 ```csharp
-// Các biến cần có
-[SerializeField] private float moveSpeed = 5f;
-private Rigidbody2D _rb;
-private Vector2 _moveInput;
-
-// Lấy reference trong Awake
-void Awake()
+private Vector3 GetCameraRelativeDirection(Vector3 input)
 {
-    _rb = GetComponent<Rigidbody2D>();
+    Vector3 camForward = _cameraTransform.forward;
+    Vector3 camRight = _cameraTransform.right;
+    camForward.y = 0;  // Flatten — không di chuyển lên trời
+    camRight.y = 0;
+    camForward.Normalize();
+    camRight.Normalize();
+    return (camForward * input.z + camRight * input.x).normalized;
 }
 
-// Method để PlayerController gọi, truyền input vào
-public void SetMovementInput(Vector2 input)
+public void Move(Vector3 input, bool isRunning = false)
 {
-    _moveInput = input;
-}
-
-// Di chuyển trong FixedUpdate (vật lý phải dùng FixedUpdate, không dùng Update)
-void FixedUpdate()
-{
-    _rb.velocity = _moveInput * moveSpeed;
-}
-
-// Flip sprite khi đổi hướng
-public void FlipSprite(float xInput)
-{
-    if (xInput != 0)
+    Vector3 moveDir = GetCameraRelativeDirection(input);
+    float speed = isRunning ? runSpeed : walkSpeed;
+    _cc.Move(moveDir * speed * Time.deltaTime);
+    
+    // Rotate to face movement direction
+    if (moveDir != Vector3.zero)
     {
-        transform.localScale = new Vector3(
-            Mathf.Sign(xInput), 1, 1
-        );
+        Quaternion targetRotation = Quaternion.LookRotation(moveDir);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
     }
 }
 ```
-
-**Giải thích:**
-- `[SerializeField]` → hiện trong Inspector để chỉnh mà không cần sửa code
-- `FixedUpdate()` cho vật lý, `Update()` cho input — đây là quy tắc Unity
-- `rb.velocity` thay vì `transform.position` → để collision hoạt động đúng
-- `Mathf.Sign(x)` trả về 1 hoặc -1 → dùng để flip sprite
 </details>
 
 ---
 
-### Task 4: Implement `PlayerController` 🎮
-> Script điều phối — kết nối InputHandler + Movement
+### Task 4: Implement `ThirdPersonCamera` 🎥
+> Camera Dark Souls style — orbit, follow, collision
 
-- [ ] Mở file `Scripts/Player/PlayerController.cs`
-- [ ] Lấy reference đến `PlayerInputHandler` và `PlayerMovement`
-- [ ] Trong `Update()`: lấy input → truyền cho Movement
+- [ ] Mở file `Scripts/Camera/ThirdPersonCamera.cs`
+- [ ] Implement `FreeLookUpdate()`: xoay theo mouse
+- [ ] Implement `HandleCollision()`: không xuyên tường
+- [ ] Lock cursor khi play
 
 <details>
-<summary>💡 Gợi ý nếu bí</summary>
+<summary>💡 Gợi ý Camera</summary>
 
 ```csharp
-private PlayerInputHandler _inputHandler;
-private PlayerMovement _movement;
-
-void Awake()
+private void FreeLookUpdate()
 {
-    _inputHandler = GetComponent<PlayerInputHandler>();
-    _movement = GetComponent<PlayerMovement>();
-}
-
-void Update()
-{
-    // Lấy input từ InputHandler → truyền cho Movement
-    Vector2 input = _inputHandler.MovementInput;
-    _movement.SetMovementInput(input);
-    _movement.FlipSprite(input.x);
+    _yaw += Input.GetAxis("Mouse X") * mouseSensitivity;
+    _pitch -= Input.GetAxis("Mouse Y") * mouseSensitivity;
+    _pitch = Mathf.Clamp(_pitch, minPitch, maxPitch);
+    
+    Quaternion rotation = Quaternion.Euler(_pitch, _yaw, 0);
+    Vector3 desiredPosition = target.position + rotation * offset;
+    
+    transform.position = Vector3.Lerp(transform.position, desiredPosition, orbitSmoothing * Time.deltaTime);
+    transform.LookAt(target.position + Vector3.up * 1.5f);
 }
 ```
-
-**Giải thích:**
-- `GetComponent<T>()` — lấy script khác trên cùng GameObject
-- Controller chỉ "keo dán" các component lại, không chứa logic phức tạp
 </details>
 
 ---
 
-### Task 5: Gắn scripts + Test 🧪
-> Bước cuối: gắn vào Player và chạy thử
+### Task 5: Implement `PlayerController` 🎮
+> Kết nối tất cả: Input → Movement → Camera
 
-- [ ] Trong Unity, chọn Player GameObject
-- [ ] Add Component → `PlayerInputHandler`
-- [ ] Add Component → `PlayerMovement`
-- [ ] Add Component → `PlayerController`
-- [ ] Bấm **Play** → Dùng WASD di chuyển
-- [ ] Nếu hoạt động → 🎉 **Congratulations! Day 01 complete!**
-
-<details>
-<summary>💡 Gợi ý nếu bí</summary>
-
-**Không di chuyển?**
-- Kiểm tra Console → có lỗi đỏ không?
-- Kiểm tra Rigidbody2D → Gravity Scale = 0?
-- Kiểm tra PlayerMovement trong Inspector → moveSpeed > 0?
-- Thêm `Debug.Log(_inputHandler.MovementInput)` trong PlayerController.Update() để xem input có nhận không
-
-**Player bay mất?**
-- Rigidbody2D → Body Type = Dynamic (không phải Kinematic)
-- Kiểm tra moveSpeed không quá lớn (5-8 là hợp lý)
-
-**Console báo NullReferenceException?**
-- Đảm bảo TẤT CẢ 3 scripts đều gắn trên CÙNG 1 GameObject
-- `GetComponent<T>()` chỉ tìm script trên cùng object
-</details>
+- [ ] `Awake()`: GetComponent tất cả references
+- [ ] `Update()`: đọc input → gọi movement.Move()
+- [ ] Test: WASD di chuyển, mouse xoay camera
 
 ---
 
-### Task 6: Git commit 📦
+### Task 6: Gắn components + Test 🧪
+> Setup Player GameObject trong scene
+
+- [ ] Tạo Player GameObject (Empty hoặc import model)
+- [ ] Add Components: `CharacterController`, `PlayerInputHandler`, `PlayerMovement`, `PlayerController`, `PlayerStats`, `PlayerAnimator`
+- [ ] CharacterController settings:
+  ```
+  Height: 1.8
+  Radius: 0.3
+  Center: (0, 0.9, 0)
+  ```
+- [ ] Tạo Camera GameObject → add `ThirdPersonCamera` → set Target = Player
+- [ ] **Play** → WASD + Mouse → Test!
+- [ ] Nếu OK → 🎉 **Day 01 Complete!**
+
+---
+
+### Task 7: Git commit 📦
 - [ ] Save scene trong Unity (`Ctrl+S`)
 - [ ] Mở terminal:
 ```bash
 git add .
-git commit -m "✨ Day 01: Player 8-directional movement"
+git commit -m "✨ Day 01: 3D Player movement + Third-person camera"
 git push
 ```
 
@@ -260,12 +217,16 @@ git push
 ## 📝 Ghi chú
 > Ghi lại nếu gặp bug hoặc học được gì mới
 
-- ...
+- Đã chuyển toàn bộ cấu trúc từ 2D → 3D
+- CharacterController thay Rigidbody2D
+- Vector3 thay Vector2 
+- OnTriggerEnter thay OnTriggerEnter2D
+- NavMeshAgent thay custom pathfinding
 
 ---
 
 ## 📌 Ngày mai — Day 02
-- PlayerStats (HP, Stamina)
-- Health component hoàn chỉnh
+- PlayerStats implementation (HP, Stamina, regen)
+- PlayerCombat (3-hit combo + heavy attack)
 - Dash/Dodge roll
-- PlayerAnimator (nếu có sprite sheet)
+- PlayerAnimator + Animator Controller setup

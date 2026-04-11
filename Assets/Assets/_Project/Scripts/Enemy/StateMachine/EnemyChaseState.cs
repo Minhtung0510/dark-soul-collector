@@ -1,12 +1,22 @@
-﻿namespace DarkSoulCollector.Enemy
+namespace DarkSoulCollector.Enemy
 {
     /// <summary>
-    /// Enemy chases player. Transitions to Attack when in range.
+    /// Chase state: enemy pursues player using NavMeshAgent.
+    /// Transitions to: Attack (in attack range) or Idle (lost player).
     /// </summary>
     public class EnemyChaseState : IEnemyState
     {
-        public void Enter() { }
-        public void Update() { }
-        public void Exit() { }
+        private readonly EnemyBase _enemy;
+        private readonly EnemyStateMachine _stateMachine;
+
+        public EnemyChaseState(EnemyBase enemy, EnemyStateMachine stateMachine)
+        {
+            _enemy = enemy;
+            _stateMachine = stateMachine;
+        }
+
+        public void Enter()  { /* TODO: agent.SetDestination(player), play run anim */ }
+        public void Update() { /* TODO: Update destination, check attack range → Attack, check lost → Idle */ }
+        public void Exit()   { /* TODO: Stop agent */ }
     }
 }
