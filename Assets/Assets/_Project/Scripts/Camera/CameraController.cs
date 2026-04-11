@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace DarkSoulCollector.Camera
+namespace DarkSoulCollector.CameraPlayer
 {
     /// <summary>
     /// Camera follow with smooth damp. Supports room-based bounds clamping.

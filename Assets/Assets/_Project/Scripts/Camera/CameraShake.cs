@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace DarkSoulCollector.Camera
+namespace DarkSoulCollector.CameraPlayer
 {
     /// <summary>
     /// Screen shake effect on hit, explosion, boss attack.
