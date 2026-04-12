@@ -90,3 +90,4 @@ packages/
 # Antigravity Agent
 # ===========================
 # Keep .agents/ tracked (SKILL.md is project memory)
+.gitnexus
