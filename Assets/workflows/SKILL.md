@@ -19,8 +19,10 @@ description: AI Agent Memory & Project Knowledge Base for the Dark Soul Collecto
 | **Engine**     | Unity (2D)                                         |
 | **Ngôn ngữ**   | C#                                                 |
 | **Namespace**  | `DarkSoulCollector.*`                              |
-| **Thể loại**   | 2D Action RPG — thu thập linh hồn, chiến đấu, khám phá dungeon |
-| **Trạng thái** | 🟡 Early Development — skeleton scripts, chưa có gameplay hoàn chỉnh |
+| **Thể loại**   | 2D Top-Down Action RPG — thu thập linh hồn, chiến đấu, khám phá dungeon |
+| **View**       | Top-Down 2D (camera nhìn từ trên xuống)                   |
+| **Physics**    | Unity 2D Physics (Rigidbody2D, Collider2D)                |
+| **Trạng thái** | 🟡 Early Dev — Player movement done, đang xây dựng core systems |
 | **Thư mục gốc**| `e:\Game\2D RPG GAME`                              |
 
 ---
@@ -81,31 +83,50 @@ Assets/Assets/_Project/
 
 ## 🏗️ Architecture & Design Patterns
 
-### Core Patterns
-1. **Singleton\<T\>** — Generic MonoBehaviour singleton tại `Scripts/Core/Singleton.cs`
-   - DontDestroyOnLoad tự động
-   - Sử dụng: `public class MyManager : Singleton<MyManager> { }`
-   - Đã dùng bởi: `GameManager`
+### 🔑 Design Patterns Đang Dùng
 
-2. **ScriptableObject Data** — Tất cả game data dùng SO (tạo qua `CreateAssetMenu`)
+1. **Component Pattern** ⭐ (Player system)
+   - Player tách thành nhiều component nhỏ, mỗi cái 1 việc:
+   - `PlayerInputHandler` — CHỈ đọc input
+   - `PlayerMovement` — CHỉ xử lý di chuyển + dash
+   - `PlayerController` — BỘ NÃO, đọc input → ra lệnh cho movement
+   - `PlayerCombat` — CHỉ xử lý chiến đấu (chưa implement)
+   - `PlayerStats` — CHỉ lưu chỉ số (chưa implement)
+   - `PlayerAnimator` — CHỉ xử lý animation (chưa implement)
+   - **Luồng dữ liệu:** `Input → Controller → Movement/Combat/Animator`
+
+2. **State Machine Pattern** (Enemy AI)
+   - Mỗi state là 1 class riêng: Idle, Patrol, Chase, Attack, Dead
+   - Interface: `IEnemyState` với `Enter()`, `Update()`, `Exit()`
+   - Base: `EnemyBase.cs`, States tại: `Scripts/Enemy/StateMachine/`
+
+3. **Singleton\<T\>** (Core managers)
+   - DontDestroyOnLoad tự động
+   - Đã dùng bởi: `GameManager`, `SceneLoader`
+   - ⚠️ Chỉ dùng cho Manager/Service, KHÔNG dùng cho Player/Enemy
+
+4. **Observer/Event Pattern** (Combat, stats)
+   - `System.Action` events: `OnHealthChanged`, `OnDied`, `OnDashStarted`
+   - Cho phép loose coupling: HP system thông báo, UI/VFX tự nghe
+
+5. **Data-Driven Design** (ScriptableObjects)
    - Namespace: `DarkSoulCollector.Data`
    - Menu path: `DarkSoulCollector/Data/*`
-
-3. **Component-Based Player** — Player tách thành nhiều component:
-   - `PlayerController` — điều phối chính
-   - `PlayerMovement` — di chuyển
-   - `PlayerCombat` — chiến đấu
-   - `PlayerStats` — chỉ số
-   - `PlayerAnimator` — animation
-   - `PlayerInputHandler` — xử lý input
-
-4. **Enemy State Machine** — Enemy AI sử dụng State Machine pattern
-   - Base: `EnemyBase.cs`
-   - States tại: `Scripts/Enemy/StateMachine/`
-
-5. **Event-Driven** — `EventManager` cho loose coupling giữa systems
+   - Tách data ra khỏi logic: designer chỉnh Inspector, dev không sửa code
 
 6. **Object Pooling** — `ObjectPool` cho projectile/VFX recycling
+
+### 🔄 2D Top-Down Architecture Notes
+```
+⚠️ QUAN TRỌNG — Các quy tắc 2D:
+- Rigidbody2D.gravityScale = 0 (top-down KHÔNG có trọng lực)
+- Rigidbody2D.freezeRotation = true (sprite không xoay do physics)
+- Movement dùng FixedUpdate() + rb.linearVelocity
+- Hướng nhìn: SpriteRenderer.flipX (KHÔNG dùng Quaternion)
+- Va chạm: OnTriggerEnter2D(Collider2D), KHÔNG phải OnTriggerEnter(Collider)
+- Hit detection: Physics2D.OverlapCircleAll(), KHÔNG phải Physics.OverlapSphere()
+- Di chuyển trên mặt phẳng X-Y (KHÔNG dùng Z)
+```
 
 ### Namespace Convention
 ```
@@ -169,14 +190,14 @@ DarkSoulCollector.SaveSystem  → Save/Load
 
 ### 🟢 Player (Scripts/Player/)
 
-| Class | Loại | Chức năng | Methods cần implement | Dependencies | Status |
-|-------|------|-----------|----------------------|--------------|--------|
-| `PlayerController` | MonoBehaviour | **Điều phối trung tâm** — kết nối tất cả component Player, quản lý state (alive/dead/stunned) | Tham chiếu + khởi tạo các component, `Initialize()` | PlayerMovement, PlayerCombat, PlayerStats, PlayerAnimator, PlayerInputHandler | 🟡 Skeleton |
-| `PlayerInputHandler` | MonoBehaviour | Đọc input từ người chơi (keyboard/gamepad), chuyển thành lệnh cho Movement/Combat | `MovementInput` (Vector2), `AttackInput`, `DashInput`, `InteractInput` (booleans), `OnMove()`, `OnAttack()`, `OnDash()` | Unity Input System | 🟡 Skeleton |
-| `PlayerMovement` | MonoBehaviour | Di chuyển 8 hướng, Dash/Dodge roll, speed modifier, flip sprite theo hướng | `Move(Vector2 input)`, `Dash()`, `SetSpeed(float)`, `FreezeMovement()` | Rigidbody2D, PlayerInputHandler | 🟡 Skeleton |
-| `PlayerCombat` | MonoBehaviour | Combo melee (light/heavy), sử dụng ability từ Soul, cooldown management | `Attack()`, `HeavyAttack()`, `UseAbility(int slot)`, `ComboReset()` | PlayerAnimator, DamageDealer, PlayerStats | 🟡 Skeleton |
-| `PlayerStats` | MonoBehaviour | Chỉ số nhân vật: HP, Stamina, ATK, DEF, Speed, Level, XP. Level-up bonus | `maxHealth`, `currentHealth`, `stamina`, `attackPower`, `defense`, `speed`, `level`, `xp`. Methods: `ModifyStat()`, `AddXP()`, `LevelUp()`, `ResetStats()` | — | 🟡 Skeleton |
-| `PlayerAnimator` | MonoBehaviour | Wrapper cho Animator — set animation states dựa trên gameplay events | `PlayMove(float speed)`, `PlayAttack(int combo)`, `PlayHurt()`, `PlayDeath()`, `PlayDash()` | Animator, Constants (anim params) | 🟡 Skeleton |
+| Class | Loại | Chức năng | Methods chính | Dependencies | Status |
+|-------|------|-----------|--------------|--------------|--------|
+| `PlayerController` | MonoBehaviour | **Bộ não** — đọc input, ra lệnh cho Movement + (sau này) Combat, Animator | `Update()`: gọi Move(), Dash() | PlayerInputHandler, PlayerMovement, Rigidbody2D | 🟢 Done |
+| `PlayerInputHandler` | MonoBehaviour | Đọc input 2D: MoveInput(Vector2), LastFacingDirection, DashPressed, AttackPressed | `MoveInput`, `LastFacingDirection`, `IsRunning`, `AttackPressed`, `DashPressed`, `InteractPressed` | — | 🟢 Done |
+| `PlayerMovement` | MonoBehaviour | Di chuyển 2D top-down (Rigidbody2D) + Dash system với cooldown | `Move(Vector2, bool)`, `Dash(Vector2)`, events: `OnDashStarted`, `OnDashEnded` | Rigidbody2D | 🟢 Done |
+| `PlayerCombat` | MonoBehaviour | Combo melee (light/heavy), sử dụng ability từ Soul, cooldown management | `Attack()`, `HeavyAttack()`, `UseAbility(int slot)`, `ComboReset()` | PlayerAnimator, DamageDealer, PlayerStats | 🟡 Empty |
+| `PlayerStats` | MonoBehaviour | Chỉ số nhân vật: HP, Stamina, ATK, DEF, Speed, Level, XP. Level-up bonus | `ModifyStat()`, `AddXP()`, `LevelUp()`, `ResetStats()` | — | 🟡 Empty |
+| `PlayerAnimator` | MonoBehaviour | Wrapper cho Animator — set animation states dựa trên gameplay events | `SetMovement()`, `TriggerAttack()`, `TriggerHurt()`, `SetDashing()` | Animator, SpriteRenderer | 🟡 Empty |
 
 ### 🔴 Combat (Scripts/Combat/)
 
@@ -265,21 +286,27 @@ DarkSoulCollector.SaveSystem  → Save/Load
 
 | Feature               | Status | Notes                                      |
 | --------------------- | ------ | ------------------------------------------ |
-| Player Movement       | 🟡     | Script skeleton, cần implement logic       |
-| Player Combat         | 🟡     | Script skeleton                            |
+| **3D → 2D Conversion**| 🟢     | Player scripts converted to 2D top-down   |
+| Player Movement       | 🟢     | Rigidbody2D, 8-dir move, dash with cooldown |
+| Player Input          | 🟢     | Vector2 input, facing direction, dash/attack |
+| Player Controller     | 🟢     | Orchestrator connecting input → movement   |
+| Player Combat         | 🟡     | Empty shell — cần implement                |
+| Player Animator       | 🟡     | Empty shell — cần implement                |
+| Player Stats          | 🟡     | Empty shell — cần implement                |
 | Health System         | 🟡     | Có method signatures, chưa có logic        |
-| Damage System         | 🟡     | DamageDealer, HitFlash, Knockback skeleton |
-| Enemy AI              | 🟡     | State Machine structure, cần implement     |
+| Damage System         | 🟡     | DamageDealer, HitFlash, Knockback skeleton (vẫn 3D) |
+| Enemy AI              | 🟡     | State Machine structure (vẫn 3D NavMesh)   |
 | Enemy Spawner         | 🟡     | Script skeleton                            |
 | Inventory System      | 🟡     | Manager + ItemSlot skeleton                |
 | Equipment System      | 🟡     | Script skeleton                            |
 | Soul Collection       | 🟡     | SoulManager, SoulCollectible — skeleton    |
 | Soul Abilities        | 🟡     | AbilityBase + Abilities folder             |
-| Weapon System         | 🟡     | WeaponData SO, cần weapon logic            |
+| Weapon System         | 🟡     | WeaponData SO, cần weapon logic (vẫn 3D)  |
 | Save/Load             | 🟡     | SaveManager + SaveData skeleton            |
 | UI System             | 🟡     | Full UI controller skeleton                |
 | Dialogue System       | 🟡     | DialogueDataSO + DialogueUIController      |
 | Audio System          | 🟡     | AudioManager + SoundLibrary skeleton       |
+| Player Sprite         | 🟢     | Sprite sheet tại Art/Sprites/Player/       |
 | Dungeon Generation    | 🔴     | Thư mục tồn tại, chưa có script           |
 | Camera System         | 🔴     | Thư mục tồn tại, chưa có script           |
 | VFX System            | 🔴     | Thư mục tồn tại, chưa có script           |
@@ -306,6 +333,11 @@ DarkSoulCollector.SaveSystem  → Save/Load
 
 4. ~~**Missing .gitignore**~~ — ✅ Đã tạo `.gitignore` cho Unity project.
 
+5. **3D↔2D Mismatch** — Player scripts đã chuyển sang 2D nhưng Combat/Enemy/Weapon scripts vẫn là 3D.
+   Khi implement các script đó, nhớ dùng: `Rigidbody2D`, `Collider2D`, `OnTriggerEnter2D`, `Physics2D`, `Vector2`.
+
+6. **Rigidbody2D API** — Unity 6+ dùng `rb.linearVelocity` thay vì `rb.velocity` (deprecated).
+
 
 ## 📅 Daily Plans
 
@@ -322,12 +354,13 @@ Khi user yêu cầu implement tính năng mới, agent nên ưu tiên theo thứ
 ### Priority 1 — Core Gameplay Loop
 - [x] Fix compile errors (CS1003)
 - [x] Setup SKILL.md + .gitignore
-- [ ] Implement `PlayerInputHandler` (input reading)
-- [ ] Implement `PlayerMovement` (Rigidbody2D movement + dash)
-- [ ] Implement `PlayerCombat` (attack, combo)
+- [x] Convert Player scripts from 3D → 2D Top-Down
+- [x] Implement `PlayerInputHandler` (Vector2 input, facing, dash/attack)
+- [x] Implement `PlayerMovement` (Rigidbody2D, 8-dir, dash with cooldown)
+- [x] Implement `PlayerController` (orchestrator: input → movement + dash)
+- [ ] Implement `PlayerAnimator` (SpriteRenderer flipX + Animator Blend Tree)
+- [ ] Implement `PlayerCombat` (Physics2D.OverlapCircleAll melee attack)
 - [ ] Implement `PlayerStats` (HP, Stamina, Level, XP)
-- [ ] Implement `PlayerAnimator` (animation state management)
-- [ ] Implement `PlayerController` (orchestrator)
 - [ ] Implement `Health` (complete with events)
 - [ ] Implement `EventManager` (pub/sub)
 
@@ -379,6 +412,13 @@ Khi user yêu cầu implement tính năng mới, agent nên ưu tiên theo thứ
 | 2026-04-11 | Created SKILL.md — AI Agent Memory & Project Knowledge Base | Agent |
 | 2026-04-11 | Created .gitignore for Unity project                        | Agent |
 | 2026-04-11 | Added Class Reference table + Daily Plan to SKILL.md        | Agent |
+| 2026-04-12 | **Converted Player scripts 3D → 2D Top-Down**              | Agent |
+|            | - PlayerInputHandler: Vector3→Vector2, bỏ jump, thêm dash/attack/facing |
+|            | - PlayerMovement: CharacterController→Rigidbody2D, bỏ gravity/jump, thêm Dash |
+|            | - PlayerController: RequireComponent Rigidbody2D, jump→dash |
+| 2026-04-12 | Generated player sprite sheet → Art/Sprites/Player/         | Agent |
+| 2026-04-12 | Added Design Patterns documentation to SKILL.md             | Agent |
+| 2026-04-12 | Các file khác (Combat, Enemy, Weapon) giữ nguyên skeleton 3D — user tự convert khi cần | Note |
 
 ---
 

@@ -7,27 +7,14 @@ namespace DarkSoulCollector.Combat
     /// </summary>
     public class KnockbackHandler : MonoBehaviour, IKnockbackable
     {
-        // ═══════════════════════════════════════════
-        //  SERIALIZED FIELDS
-        // ═══════════════════════════════════════════
         [SerializeField] private float knockbackDuration = 0.2f;
         [SerializeField] private float knockbackDecay = 5f;
 
-        // ═══════════════════════════════════════════
-        //  PRIVATE FIELDS
-        // ═══════════════════════════════════════════
         private CharacterController _cc;
         private Vector3 _knockbackVelocity;
         private bool _isKnockedBack;
 
-        // ═══════════════════════════════════════════
-        //  PUBLIC PROPERTIES
-        // ═══════════════════════════════════════════
         public bool IsKnockedBack => _isKnockedBack;
-
-        // ═══════════════════════════════════════════
-        //  UNITY LIFECYCLE
-        // ═══════════════════════════════════════════
 
         private void Awake()
         {
@@ -40,10 +27,6 @@ namespace DarkSoulCollector.Combat
             // TODO: Decay _knockbackVelocity over time
             // TODO: When magnitude < threshold → _isKnockedBack = false
         }
-
-        // ═══════════════════════════════════════════
-        //  PUBLIC METHODS
-        // ═══════════════════════════════════════════
 
         public void ApplyKnockback(Vector3 direction, float force)
         {

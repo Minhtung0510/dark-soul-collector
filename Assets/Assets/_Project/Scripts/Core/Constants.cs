@@ -1,4 +1,4 @@
-﻿namespace DarkSoulCollector.Core
+namespace DarkSoulCollector.Core
 {
     /// <summary>
     /// Global constants: tags, layers, animation params, scene names.

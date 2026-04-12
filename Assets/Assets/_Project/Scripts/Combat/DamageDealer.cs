@@ -8,20 +8,10 @@ namespace DarkSoulCollector.Combat
     /// </summary>
     public class DamageDealer : MonoBehaviour
     {
-        // ═══════════════════════════════════════════
-        //  SERIALIZED FIELDS
-        // ═══════════════════════════════════════════
         [SerializeField] private float damage = 10f;
         [SerializeField] private float knockbackForce = 5f;
 
-        // ═══════════════════════════════════════════
-        //  PUBLIC PROPERTIES
-        // ═══════════════════════════════════════════
         public float Damage { get => damage; set => damage = value; }
-
-        // ═══════════════════════════════════════════
-        //  3D COLLISION
-        // ═══════════════════════════════════════════
 
         private void OnTriggerEnter(Collider other)
         {
