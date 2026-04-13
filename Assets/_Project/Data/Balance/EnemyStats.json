@@ -1,0 +1,28 @@
+{
+  "areas": [
+    {
+      "id": "area1_forest",
+      "name": "Rừng U Ám",
+      "enemies": [
+        { "id": "slime",        "level": 1,  "hp": 30,   "atk": 5,   "soulDrop": 3,   "material": "Wood" },
+        { "id": "shadow_bat",   "level": 3,  "hp": 20,   "atk": 8,   "soulDrop": 5,   "material": "Wood" },
+        { "id": "dark_wolf",    "level": 5,  "hp": 60,   "atk": 12,  "soulDrop": 8,   "material": "Wood" },
+        { "id": "venom_spider", "level": 8,  "hp": 80,   "atk": 15,  "soulDrop": 12,  "material": "Wood+Iron" },
+        { "id": "stone_golem",  "level": 12, "hp": 200,  "atk": 20,  "soulDrop": 25,  "material": "Iron" }
+      ],
+      "boss": { "id": "tree_lord", "level": 15, "hp": 2000, "atk": 35, "soulDrop": 500, "material": "BossSoul", "phases": 2 }
+    },
+    {
+      "id": "area2_graveyard",
+      "name": "Nghĩa Địa Cổ",
+      "enemies": [
+        { "id": "skeleton",       "level": 15, "hp": 120,  "atk": 25,  "soulDrop": 20,  "material": "Iron" },
+        { "id": "cursed_zombie",  "level": 20, "hp": 250,  "atk": 30,  "soulDrop": 30,  "material": "Iron" },
+        { "id": "wailing_ghost",  "level": 25, "hp": 100,  "atk": 40,  "soulDrop": 40,  "material": "Crystal" },
+        { "id": "vampire_lord",   "level": 35, "hp": 400,  "atk": 50,  "soulDrop": 60,  "material": "Crystal" },
+        { "id": "death_knight",   "level": 45, "hp": 800,  "atk": 70,  "soulDrop": 100, "material": "Crystal+DarkOre" }
+      ],
+      "boss": { "id": "lich_king", "level": 50, "hp": 8000, "atk": 80, "soulDrop": 2000, "material": "BossSoul_x3", "phases": 3 }
+    }
+  ]
+}

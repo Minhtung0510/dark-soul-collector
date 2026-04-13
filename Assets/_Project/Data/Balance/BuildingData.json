@@ -1,0 +1,36 @@
+{
+  "buildings": [
+    {
+      "id": "forge",
+      "name": "Forge",
+      "icon": "⚒️",
+      "function": "Craft gear",
+      "idleBonus": "Auto-craft potions offline",
+      "maxLevel": 5
+    },
+    {
+      "id": "shrine",
+      "name": "Shrine",
+      "icon": "🏪",
+      "function": "Summon/merge minions",
+      "idleBonus": "+% farm speed",
+      "maxLevel": 5
+    },
+    {
+      "id": "warehouse",
+      "name": "Warehouse",
+      "icon": "📦",
+      "function": "Storage cap",
+      "idleBonus": "Increase offline time (4→8h)",
+      "maxLevel": 5
+    },
+    {
+      "id": "lab",
+      "name": "Lab",
+      "icon": "🔮",
+      "function": "Research",
+      "idleBonus": "Research runs offline",
+      "maxLevel": 5
+    }
+  ]
+}

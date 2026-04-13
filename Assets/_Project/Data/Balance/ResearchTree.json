@@ -1,0 +1,31 @@
+{
+  "trees": {
+    "combat": {
+      "nodes": [
+        { "id": "sharp_blade_1",  "name": "Sharp Blade I",   "tier": 1, "timeHours": 1 },
+        { "id": "sharp_blade_2",  "name": "Sharp Blade II",  "tier": 2, "timeHours": 3 },
+        { "id": "critical_eye_1", "name": "Critical Eye",    "tier": 3, "timeHours": 8,  "requires": "sharp_blade_2" },
+        { "id": "critical_eye_2", "name": "Critical Eye II", "tier": 4, "timeHours": 24, "requires": "critical_eye_1" },
+        { "id": "soul_burst_plus","name": "Soul Burst+",     "tier": 5, "timeHours": 72, "requires": "critical_eye_2" }
+      ]
+    },
+    "idle": {
+      "nodes": [
+        { "id": "soul_magnet_1",  "name": "Soul Magnet I",   "tier": 1, "timeHours": 1 },
+        { "id": "soul_magnet_2",  "name": "Soul Magnet II",  "tier": 2, "timeHours": 3 },
+        { "id": "minion_boost_1", "name": "Minion Boost",    "tier": 3, "timeHours": 8,  "requires": "soul_magnet_2" },
+        { "id": "minion_boost_2", "name": "Minion Boost II", "tier": 4, "timeHours": 24, "requires": "minion_boost_1" },
+        { "id": "minion_slot",    "name": "Minion Slot +1",  "tier": 5, "timeHours": 72, "requires": "minion_boost_2" }
+      ]
+    },
+    "exploration": {
+      "nodes": [
+        { "id": "swift_feet_1",   "name": "Swift Feet I",    "tier": 1, "timeHours": 1 },
+        { "id": "swift_feet_2",   "name": "Swift Feet II",   "tier": 2, "timeHours": 3 },
+        { "id": "treasure_sense", "name": "Treasure Sense",  "tier": 3, "timeHours": 8,  "requires": "swift_feet_2" },
+        { "id": "lucky_find",     "name": "Lucky Find",      "tier": 4, "timeHours": 24, "requires": "treasure_sense" },
+        { "id": "map_reveal",     "name": "Map Reveal",      "tier": 5, "timeHours": 72, "requires": "lucky_find" }
+      ]
+    }
+  }
+}

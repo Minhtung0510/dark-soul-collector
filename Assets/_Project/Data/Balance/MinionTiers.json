@@ -1,0 +1,14 @@
+{
+  "tiers": [
+    { "tier": 1, "name": "Ghost",    "cost": 100,   "farmPerHour": 10,  "unlock": "Start" },
+    { "tier": 2, "name": "Wraith",   "cost": 500,   "farmPerHour": 35,  "unlock": "Clear Area 1" },
+    { "tier": 3, "name": "Phantom",  "cost": 2000,  "farmPerHour": 100, "unlock": "Clear Area 2" },
+    { "tier": 4, "name": "Revenant", "cost": 10000, "farmPerHour": 350, "unlock": "Boss 3" }
+  ],
+  "maxLevel": 5,
+  "levelMultiplier": 1.5,
+  "mergeRequirement": 3,
+  "totalSlots": 5,
+  "freeSlots": 2,
+  "paidSlotCost": "Gems"
+}

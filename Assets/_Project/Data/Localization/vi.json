@@ -1,0 +1,17 @@
+{
+  "locale": "vi",
+  "strings": {
+    "game_title": "Idle Soul Survivor",
+    "tagline": "Survive the dark. Even when you're not watching.",
+    "area1_name": "Rừng U Ám",
+    "area2_name": "Nghĩa Địa Cổ",
+    "offline_reward_title": "Phần thưởng offline",
+    "offline_reward_ad": "Xem quảng cáo để nhận x2",
+    "boss_fight": "Đánh Boss",
+    "upgrade": "Nâng cấp",
+    "merge": "Hợp nhất",
+    "summon": "Triệu hồi",
+    "equip": "Trang bị",
+    "research": "Nghiên cứu"
+  }
+}

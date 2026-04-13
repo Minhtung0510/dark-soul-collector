@@ -1,0 +1,11 @@
+{
+  "skills": [
+    { "id": "flame_slash",   "name": "Flame Slash",   "cooldown": 8,  "effect": "AoE 200% ATK",                     "type": "damage" },
+    { "id": "soul_shield",   "name": "Soul Shield",   "cooldown": 15, "effect": "Block 3 hits",                      "type": "defense" },
+    { "id": "life_drain",    "name": "Life Drain",     "cooldown": 12, "effect": "Heal 20% dmg dealt for 5s",        "type": "sustain" },
+    { "id": "thunder_strike","name": "Thunder Strike", "cooldown": 10, "effect": "Stun + 150% ATK",                  "type": "cc" },
+    { "id": "shadow_step",   "name": "Shadow Step",    "cooldown": 20, "effect": "Invincible 3s + 100% crit chance", "type": "utility" },
+    { "id": "soul_burst",    "name": "Soul Burst",     "cooldown": 30, "effect": "500% ATK ultimate",                "type": "ultimate" }
+  ],
+  "maxEquipped": 3
+}
